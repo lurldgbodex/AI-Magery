@@ -2,6 +2,8 @@
 
 ## Overview
 
+[![.github/workflows/pyton-ci.yml](https://github.com/lurldgbodex/ai-magery/actions/workflows/pyton-ci.yml/badge.svg)](https://github.com/lurldgbodex/ai-magery/actions/workflows/pyton-ci.yml)
+
 This is the backend component of the AI Image Transformation Application. It handles API requests for image transformation tasks and uses AI models like Stable Diffusion to generate modified images.
 
 ## Features
