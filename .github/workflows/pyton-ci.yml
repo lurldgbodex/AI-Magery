@@ -3,16 +3,15 @@ name: Python CI pipeline
 on:
   push:
     branches:
-      - 'main'
+      - "main"
     paths:
-      - 'backend/'
+      - "backend/"
   pull_request:
     branches:
-      - 'main'
+      - "main"
     paths:
-      - 'backend/'
+      - "backend/"
   workflow_dispatch:
-
 
 jobs:
   build-and-test:
@@ -37,17 +36,17 @@ jobs:
 
     - name: Install dependencies
       run: |
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Run linting
       run: |
-        flake8 .
+        flake8 --exclude=venv
 
     - name: Run tests
       run: |
         pytest
-      
+
     - name: Run app
       run: |
         uvicorn api.main:app &
@@ -66,4 +65,3 @@ jobs:
           exit 1
         fi
         kill $pid
-        
