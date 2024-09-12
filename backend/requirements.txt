@@ -4,3 +4,5 @@ celery
 redis
 pytest
 flake8
+minio
+python-dotenv
