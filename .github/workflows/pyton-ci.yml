@@ -17,14 +17,33 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      minio:
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: ${{ secrets.MINIO_USER }}
+          MINIO_ROOT_PASSWORD: ${{ secrets.MINIO_PASSWORD }}
+        ports:
+          - "9000:9000"
+          - "9001:9001"
+
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: set up python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
+      - name: Wait for MinIO to be ready
+        run: |
+          for in in {1..10}; do
+            nc -zv localhost 9000 && echo "MinIO is ready" && break
+            echo "Waiting for MinIO to be ready..."
+            sleep 5
+          done
+          nc -zv localhost 9000 || { echo "MinIO failed to start"; exit 1; }
 
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -43,25 +62,28 @@ jobs:
         run: |
           flake8 --exclude=venv
 
-      - name: Run tests
+      - name: Run tests with coverage
+        env:
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_PASSWORD }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_USER }}
+          MINIO_URL: localhost:9000
+          MINIO_BUCKET_NAME: test-bucket
         run: |
-          pytest
+          pytest --cov=backend --cov-report=html:test-reports/
+
+      - name: upload test reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: test-reports/
 
       - name: Run app
         run: |
           uvicorn backend.api.main:app &
-          pid=$!
-          for i in {1..10}; do
-            if ps -p $pid > /dev/null; then
-              echo "App is running"
-              break
-            else
-              echo "Waiting for app to start..."
-              sleep 1
-            fi
+          for i in {1..30}; do
+            curl --fail http://localhost:8000/ && break
+            echo "Waiting for app to start..."
+            sleep 1
           done
-          if ! ps -p $pid > /dev/null; then
-            echo "App failed to start"
-            exit 1
-          fi
-          kill $pid
+          curl --fail http://localhost:8000/ || { echo "App failed to start"; exit 1; }
