@@ -29,7 +29,38 @@ Ensure that you have the project dependencies installed in a virtual environment
 pip install -r requirements.txt
 ```
 
-### 2. Run the FastAPI Application
+### 2. Setup Minio
+
+#### Quick Setup
+
+- Create a .env file in the root of the project and define the following vaules
+
+```bash
+    MINIO_USER=your-minio_user
+    MINIO_PASSWORD=your-minio_password
+```
+
+- Run MinIO with Docker compose
+
+```bash
+ docker compose up -d
+```
+
+- MinIO will be available on:
+  - MinIO console: http://localhost:9001 \
+    Log in using the `MINIO_USER` AND `MINIO_PASSWORD` values you set
+  - MinIO API: http://localhost:9000
+- Access MinIO console: Once the service is running, visit the MinIO console, log in using the credentials from your .env file, and configure your access_key and secret_key if needed.
+- Create a .env file in the `backend/` directory and define the following values
+
+```bash
+    MINIO_URL=localhost:9000
+    MINIO_ACCESS_KEY=your-access-key
+    MINIO_SECRET_KEY=your-secret-key
+    MINIO_BUCKET_NAME=your-bucket-name
+```
+
+### 3. Run the FastAPI Application
 
 To run the FastAPI app locally:
 
@@ -39,7 +70,7 @@ uvicorn api.main:app --reload
 
 The API should now be accessible at `http://127.0.0.1:8000`
 
-### 3. Running the celery workers
+### 4. Running the celery workers
 
 Start the celery worker to handle background tasks:
 

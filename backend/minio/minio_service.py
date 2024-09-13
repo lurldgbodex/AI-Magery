@@ -1,6 +1,8 @@
 from minio import Minio
+from minio.error import S3Error
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 
 
 if os.getenv("CI") is None:
@@ -42,7 +44,11 @@ class MinioService:
             print(f"Bucket {self.bucket_name} already exists")
 
     def upload_image(self, file_path: str) -> None:
-        """upload an image to the connected minio bucket"""
+        """
+        upload an image to the connected minio bucket
+
+        :file_path: The path of the file to upload to minio bucket
+        """
         file_name = os.path.basename(file_path)
         try:
             self.minio_client.fput_object(
@@ -50,3 +56,25 @@ class MinioService:
             print(f"Successfully uploaded {file_name} to bucket")
         except Exception as e:
             print(f"Failed to upload image {file_name}: {e}")
+            raise e
+
+    def get_object_url(self, object_name: str,
+                       expiration: timedelta = timedelta(hours=1)) -> str:
+        """
+        Retrieve an image from the MinIO bucket and
+        save it to the specified path
+
+        :param object_name: The name of the object in the MinIO bucket
+        :param expiration: The duration for which the pre-signed url
+         will be valid
+        """
+        try:
+            presigned_url = self.minio_client.presigned_get_object(
+                self.bucket_name, object_name, expires=expiration
+            )
+
+            print(f"Pre-signed URL: {presigned_url}")
+            return presigned_url
+        except S3Error as err:
+            print(f"Failed to generated pre-signed url: {err.message}")
+            raise err
