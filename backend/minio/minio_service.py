@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 import os
 
 
-load_dotenv()
+if os.getenv("CI") is None:
+    load_dotenv()
 
 
 class MinioService:
