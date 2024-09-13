@@ -82,8 +82,8 @@ jobs:
         run: |
           uvicorn backend.api.main:app &
           for i in {1..30}; do
-            curl --fail http://localhost:8000/health && break
+            curl --fail http://localhost:8000/ && break
             echo "Waiting for app to start..."
             sleep 1
           done
-          curl --fail http://localhost:8000/health || { echo "App failed to start"; exit 1; }
+          curl --fail http://localhost:8000/ || { echo "App failed to start"; exit 1; }
