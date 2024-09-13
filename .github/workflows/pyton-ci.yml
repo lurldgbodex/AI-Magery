@@ -46,7 +46,10 @@ jobs:
 
       - name: Setup environment variable
         run: |
-          echo "${{ secrets.MY_ENV_FILE }}" > .env
+          echo "MINIO_SECRET_KEY=${{ secrets.MINIO_USER }}" > .env
+          echo "MINIO_ACCESS_KEY=${{ secrets.MINIO_PASSWORD}}" >> .env
+          echo "MINIO_URL=localhost:9000" >> .env
+          echo "MINIO_BUCKET_NAME=test-bucket" >> .env
 
       - name: Install dependencies
         run: |
