@@ -17,6 +17,16 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      minio:
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: ${{ secrets.MINIO_USER }}
+          MINIO_ROOT_PASSWORD: ${{ secrets.MINIO_PASSWORD }}
+        ports:
+          - "9000:9000"
+          - "9001:9001"
+
     steps:
       - name: checkout code
         uses: actions/checkout@v4
@@ -33,6 +43,10 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Setup environment variable
+        run: |
+          echo "${{ secrets.MY_ENV_FILE }}" > .env
 
       - name: Install dependencies
         run: |
