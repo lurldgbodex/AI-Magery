@@ -62,6 +62,11 @@ jobs:
         run: |
           flake8 --exclude=venv
 
+      - name: Print environement variables
+        run: |
+          echo "MINIO_SECRET_KEY=${{ secrets.MINIO_USER }}"
+          echo "MINIO_ACCESS_KEY=${{ secrets.MINIO_PASSWORD }}"
+
       - name: Run tests with coverage
         env:
           MINIO_SECRET_KEY: ${{ secrets.MINIO_USER }}
@@ -69,7 +74,7 @@ jobs:
           MINIO_URL: localhost:9000
           MINIO_BUCKET_NAME: test-bucket
         run: |
-          pytest --cov=backend
+          pytest --cov=backend --cov-report=html:test-reports/
 
       - name: upload test reports
         if: always()
