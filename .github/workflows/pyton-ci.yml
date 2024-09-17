@@ -89,6 +89,8 @@ jobs:
           path: test-reports/
 
       - name: Run app
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
         run: |
           uvicorn backend.api.main:app &
           for i in {1..30}; do
