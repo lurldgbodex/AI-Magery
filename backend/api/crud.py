@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
-from models.jobs import Job
+from backend.models.jobs import Job
 
 
 def create_job(db: Session, status: str, image_url: str, prompts: str):

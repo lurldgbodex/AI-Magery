@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from models.config import SessionLocal, engine
-from models.jobs import Base
-from api.crud import create_job, get_job_by_id
-from utils.validate_image import validate_image
+from backend.models.config import SessionLocal, engine
+from backend.models.jobs import Base
+from backend.api.crud import create_job, get_job_by_id
+from backend.utils.validate_image import validate_image
 
 
 app = FastAPI()
