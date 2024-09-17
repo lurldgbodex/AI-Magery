@@ -6,3 +6,12 @@ pytest-cov
 flake8
 minio
 python-dotenv
+psycopg2-binary
+sqlalchemy
+alembic
+databases
+pydantic
+asyncpg
+pillow
+python-multipart
+httpx
