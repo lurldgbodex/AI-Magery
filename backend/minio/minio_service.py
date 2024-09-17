@@ -47,7 +47,7 @@ class MinioService:
         """
         upload an image to the connected minio bucket
 
-        :file_path: The path of the file to upload to minio bucket
+        :param file_path: The path of the file to upload to minio bucket
         """
         file_name = os.path.basename(file_path)
         try:

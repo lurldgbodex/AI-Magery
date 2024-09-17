@@ -2,6 +2,8 @@
 
 ## Project Overview
 
+[![.github/workflows/pyton-ci.yml](https://github.com/lurldgbodex/ai-magery/actions/workflows/pyton-ci.yml/badge.svg)](https://github.com/lurldgbodex/ai-magery/actions/workflows/pyton-ci.yml)
+
 This project is an AI-powered application that allows users to upload images and generate new images based on specific modifications. The AI will process the images to produce variations, such as generating corporate attire versions, modifying facial features, and changing the background while retaining appearance.
 
 ## Features
