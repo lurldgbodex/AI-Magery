@@ -99,9 +99,3 @@ jobs:
             sleep 1
           done
           curl --fail http://localhost:8000/ || { echo "App failed to start"; exit 1; }
-
-      - name: Run migrations
-        run: |
-          cd backend
-          alembic revision --autogenerate
-          alembic upgrade head
