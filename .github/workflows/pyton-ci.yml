@@ -90,7 +90,8 @@ jobs:
 
       - name: Run app
         run: |
-          uvicorn backend.api.main:app &
+          cd backend
+          uvicorn api.main:app &
           for i in {1..30}; do
             curl --fail http://localhost:8000/ && break
             echo "Waiting for app to start..."
